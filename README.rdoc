@@ -74,6 +74,14 @@ Support for Go 1.0 was provided by Jeremy Whitlock (http://github.com/whitlockjc
 [Ctrl-H]        Show the Go HTML documentation for the currently-selected symbol.
 [<ESC>]         Complete the symbol under the cursor.
 
+=== Godep Support
+
+Damian Murphy (http://github.com/damomurf) has added preliminary Godep (https://github.com/tools/godep) support for running this bundle in an environment that uses Godep for dependency management. Simply set your TM_GODEP TextMate variable to the path of your godep binary (normally $GOPATH/bin/godep). You may also be required to explicity set GOPATH in your TextMate variables.
+
+Not setting the TM_GODEP variable will cause the bundle to execute normally.
+
+Currently this does not support godoc.
+
 === Thanks
 Thanks be to lasersox and Infininight over at the #textmate room on IRC (irc://irc.freenode.net/textmate) for all their help in cleaning up this here bundle, and for helping me to optimize my regex use in the language grammar.
 Thanks to Martin Kühl for his extensive additions to this project's snippets and commands. Also Infininight's work on updating the bundle to use the TextMate's new Ruby interface and Jeremy & Sylvain's work on supporting Go 1.0 has been invaluable. Their assistance and stewardship while I've been deep in the world of Objective-C is very much appreciated.
