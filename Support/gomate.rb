@@ -14,7 +14,11 @@ ENV['GOPATH'] = (ENV.has_key?('TM_GOPATH') ? ENV['TM_GOPATH'] : '') +
 module Go
   def Go::go(command, options={})
     # TextMate's special TM_GO or expect 'go' on PATH
-    go_cmd = ENV['TM_GO'] || 'go'
+    if ENV.has_key?('TM_GODEP')
+      go_cmd = ENV['TM_GODEP']
+    else
+      go_cmd = ENV['TM_GO'] || 'go'
+    end
     TextMate.save_if_untitled('go')
     TextMate::Executor.make_project_master_current_document
 
@@ -34,6 +38,16 @@ module Go
       args.push(ENV['TM_FILEPATH'])
     end
     args.push(opts)
+
+    if ENV.has_key?('TM_GODEP')
+      args.unshift(command)
+      command = 'go'
+      opts[:chdir] = ENV['TM_DIRECTORY']
+      Dir.chdir(ENV['TM_DIRECTORY'])
+    end
+
+    # STDERR.puts go_cmd, command, *args
+    # ENV.each_pair {|key,value| STDERR.puts "#{key} = #{value} "}
 
     TextMate::Executor.run(go_cmd, command, *args)
   end
@@ -77,12 +91,12 @@ module Go
 
     args = []
     args.push(gofmt_cmd)
-    args.push("-tabwidth=#{ENV['TM_TAB_SIZE']}")
-    if ENV['TM_SOFT_TABS'] && ENV['TM_SOFT_TABS'] == 'YES'
-      args.push('-tabs=false')
-    else
-      args.push('-tabs=true')
-    end
+    # args.push("-tabwidth=#{ENV['TM_TAB_SIZE']}")
+    # if ENV['TM_SOFT_TABS'] && ENV['TM_SOFT_TABS'] == 'YES'
+    #   args.push('-tabs=false')
+    # else
+    #   args.push('-tabs=true')
+    # end
     args.push(ENV['TM_FILEPATH'])
 
     out, err = TextMate::Process.run(*args)
